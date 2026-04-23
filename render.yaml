@@ -1,7 +1,7 @@
 services:
   - type: web
     name: planmon
-    runtime: static
+    runtime: node
     plan: free
     buildCommand: npm install && npm run build
-    staticPublishPath: ./out
+    startCommand: npm run start

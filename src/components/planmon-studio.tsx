@@ -1,49 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { useDeferredValue, useEffect, useState } from "react";
+import { useDeferredValue, useEffect, useRef, useState } from "react";
+import { computeLevel, defaultStudioData, type StudioData } from "@/lib/planmon";
 
-type Subject = {
-  id: number;
-  name: string;
-  examDate: string;
-  progress: number;
-};
-
-type Task = {
-  id: number;
-  text: string;
-  subject: string;
-  done: boolean;
-};
-
-type StudioData = {
-  studentName: string;
-  goal: string;
-  subjects: Subject[];
-  tasks: Task[];
-};
-
-const defaultSubjects: Subject[] = [
-  { id: 1, name: "수학", examDate: "2026-05-11", progress: 72 },
-  { id: 2, name: "과학", examDate: "2026-05-13", progress: 61 },
-  { id: 3, name: "국어", examDate: "2026-05-09", progress: 80 },
-];
-
-const defaultTasks: Task[] = [
-  { id: 1, text: "수학 중간고사 서술형 4문제", subject: "수학", done: true },
-  { id: 2, text: "과학 반응식 암기 20분", subject: "과학", done: false },
-  { id: 3, text: "국어 문법 오답노트 정리", subject: "국어", done: false },
-];
-
-const storageKey = "planmon-studio";
-
-const defaultStudioData: StudioData = {
-  studentName: "대성",
-  goal: "중간고사 전 과목 평균 92점",
-  subjects: defaultSubjects,
-  tasks: defaultTasks,
-};
+const storageKey = "planmon-studio-v2";
+const deviceStorageKey = "planmon-device-id";
 
 function getInitialStudioData(): StudioData {
   if (typeof window === "undefined") {
@@ -57,37 +19,124 @@ function getInitialStudioData(): StudioData {
   }
 
   try {
-    const parsed = JSON.parse(raw) as StudioData;
-
-    return {
-      studentName: parsed.studentName || defaultStudioData.studentName,
-      goal: parsed.goal || defaultStudioData.goal,
-      subjects: parsed.subjects?.length ? parsed.subjects : defaultSubjects,
-      tasks: parsed.tasks?.length ? parsed.tasks : defaultTasks,
-    };
+    return JSON.parse(raw) as StudioData;
   } catch {
     window.localStorage.removeItem(storageKey);
     return defaultStudioData;
   }
 }
 
+function getDeviceId() {
+  if (typeof window === "undefined") {
+    return "";
+  }
+
+  const existing = window.localStorage.getItem(deviceStorageKey);
+
+  if (existing) {
+    return existing;
+  }
+
+  const created = crypto.randomUUID();
+  window.localStorage.setItem(deviceStorageKey, created);
+  return created;
+}
+
 export default function PlanmonStudio() {
-  const [studioData, setStudioData] = useState(getInitialStudioData);
+  const [studioData, setStudioData] = useState<StudioData>(getInitialStudioData);
   const [newSubject, setNewSubject] = useState("");
   const [newTask, setNewTask] = useState("");
   const [selectedSubject, setSelectedSubject] = useState(
-    () => getInitialStudioData().subjects[0]?.name || "수학",
+    () => getInitialStudioData().subjects[0]?.name || defaultStudioData.subjects[0].name,
   );
-  const { studentName, goal, subjects, tasks } = studioData;
-  const deferredName = useDeferredValue(studentName);
+  const [deviceId] = useState(getDeviceId);
+  const [syncLabel, setSyncLabel] = useState("브라우저에 저장 중");
+  const [cloudEnabled, setCloudEnabled] = useState(false);
+  const initializedSync = useRef(false);
+  const deferredName = useDeferredValue(studioData.studentName);
 
   useEffect(() => {
     window.localStorage.setItem(storageKey, JSON.stringify(studioData));
   }, [studioData]);
 
-  const completedCount = tasks.filter((task) => task.done).length;
-  const xp = 180 + completedCount * 42 + Math.round(subjects.reduce((sum, subject) => sum + subject.progress, 0) / 8);
-  const level = Math.floor(xp / 90);
+  useEffect(() => {
+    if (!deviceId) {
+      return;
+    }
+
+    let active = true;
+
+    const loadProfile = async () => {
+      try {
+        const response = await fetch(`/api/studio?deviceId=${deviceId}`, { cache: "no-store" });
+
+        if (response.status === 503) {
+          if (active) {
+            setCloudEnabled(false);
+            setSyncLabel("브라우저 전용 저장");
+          }
+          return;
+        }
+
+        const payload = (await response.json()) as { profile?: StudioData | null };
+
+        if (!active) {
+          return;
+        }
+
+        setCloudEnabled(true);
+        setSyncLabel("수파베이스 연결됨");
+
+        if (payload.profile) {
+          setStudioData(payload.profile);
+          setSelectedSubject(payload.profile.subjects[0]?.name || defaultStudioData.subjects[0].name);
+        }
+      } catch {
+        if (active) {
+          setCloudEnabled(false);
+          setSyncLabel("브라우저 전용 저장");
+        }
+      } finally {
+        initializedSync.current = true;
+      }
+    };
+
+    void loadProfile();
+
+    return () => {
+      active = false;
+    };
+  }, [deviceId]);
+
+  useEffect(() => {
+    if (!deviceId || !initializedSync.current || !cloudEnabled) {
+      return;
+    }
+
+    const timer = window.setTimeout(async () => {
+      setSyncLabel("수파베이스 저장 중");
+
+      try {
+        const response = await fetch("/api/studio", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ deviceId, profile: studioData }),
+        });
+
+        if (!response.ok) {
+          throw new Error("save failed");
+        }
+
+        setSyncLabel("수파베이스에 저장됨");
+      } catch {
+        setSyncLabel("브라우저 저장으로 유지됨");
+      }
+    }, 800);
+
+    return () => window.clearTimeout(timer);
+  }, [cloudEnabled, deviceId, studioData]);
+
+  const { xp, level, completedCount } = computeLevel(studioData);
 
   const addSubject = () => {
     const name = newSubject.trim();
@@ -96,16 +145,12 @@ export default function PlanmonStudio() {
       return;
     }
 
-    const subject: Subject = {
-      id: Date.now(),
-      name,
-      examDate: "2026-05-20",
-      progress: 10,
-    };
-
     setStudioData((current) => ({
       ...current,
-      subjects: [...current.subjects, subject],
+      subjects: [
+        ...current.subjects,
+        { id: Date.now(), name, examDate: "2026-05-20", progress: 10 },
+      ],
     }));
     setSelectedSubject(name);
     setNewSubject("");
@@ -158,27 +203,19 @@ export default function PlanmonStudio() {
               {deferredName}의 공부 대시보드
             </h1>
             <p className="mt-3 max-w-2xl text-sm leading-7 text-[#355070]">
-              로그인 없이도 바로 체험할 수 있는 시작 페이지입니다. 지금 내용은 이 브라우저에
-              저장되고, 나중에 Supabase로 연결하기 쉽게 구조를 잡아두었습니다.
+              지금 입력하는 내용은 브라우저에 즉시 저장되고, 수파베이스 환경변수가 연결되어 있으면 클라우드에도 함께 저장됩니다.
             </p>
           </div>
           <div className="flex flex-col gap-3 sm:flex-row">
+            <div className="rounded-full bg-white/70 px-4 py-3 text-sm font-semibold text-[#16324F]">
+              저장 상태: {syncLabel}
+            </div>
             <Link
               className="rounded-full bg-[#16324F] px-5 py-3 text-center text-sm font-semibold text-white hover:-translate-y-0.5"
-              href="/"
+              href="/checkout"
             >
-              랜딩으로 돌아가기
+              플랜 업그레이드
             </Link>
-            <button
-              className="rounded-full border border-[#16324F]/10 bg-white/80 px-5 py-3 text-sm font-semibold text-[#16324F] hover:-translate-y-0.5"
-              onClick={() => {
-                setStudioData(defaultStudioData);
-                setSelectedSubject(defaultSubjects[0].name);
-              }}
-              type="button"
-            >
-              데모 데이터 복원
-            </button>
           </div>
         </div>
       </header>
@@ -199,11 +236,11 @@ export default function PlanmonStudio() {
                     studentName: event.target.value,
                   }))
                 }
-                value={studentName}
+                value={studioData.studentName}
               />
             </label>
             <label className="block">
-              <span className="mb-2 block text-sm font-semibold text-[#16324F]">목표</span>
+              <span className="mb-2 block text-sm font-semibold text-[#16324F]">이번 목표</span>
               <textarea
                 className="min-h-28 w-full rounded-[1.2rem] border border-[#16324F]/10 bg-white/80 px-4 py-3 outline-none"
                 onChange={(event) =>
@@ -212,7 +249,7 @@ export default function PlanmonStudio() {
                     goal: event.target.value,
                   }))
                 }
-                value={goal}
+                value={studioData.goal}
               />
             </label>
           </div>
@@ -240,24 +277,20 @@ export default function PlanmonStudio() {
             </div>
             <div className="rounded-[1.8rem] bg-gradient-to-br from-[#FFBF69] to-[#FFD9A0] p-5 text-[#16324F] shadow-lg">
               <p className="text-xs tracking-[0.2em] uppercase text-[#16324F]/70">등록 과목</p>
-              <p className="mt-3 text-4xl font-bold">{subjects.length}</p>
+              <p className="mt-3 text-4xl font-bold">{studioData.subjects.length}</p>
             </div>
             <div className="rounded-[1.8rem] bg-gradient-to-br from-[#1B4965] to-[#4F86A6] p-5 text-white shadow-lg">
-              <p className="text-xs tracking-[0.2em] uppercase text-white/80">주간 목표</p>
-              <p className="mt-3 text-lg font-semibold leading-7">{goal}</p>
+              <p className="text-xs tracking-[0.2em] uppercase text-white/80">이번 목표</p>
+              <p className="mt-3 text-lg font-semibold leading-7">{studioData.goal}</p>
             </div>
           </section>
 
           <section className="grid gap-6 xl:grid-cols-[1fr_1fr]">
             <article className="glass-card rounded-[2rem] p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-semibold tracking-[0.25em] text-[#5C7C92] uppercase">
-                    Subjects
-                  </p>
-                  <h2 className="mt-2 font-display text-3xl text-[#16324F]">과목 관리</h2>
-                </div>
-              </div>
+              <p className="text-sm font-semibold tracking-[0.25em] text-[#5C7C92] uppercase">
+                Subjects
+              </p>
+              <h2 className="mt-2 font-display text-3xl text-[#16324F]">과목 관리</h2>
               <div className="mt-5 flex gap-3">
                 <input
                   className="flex-1 rounded-[1.2rem] border border-[#16324F]/10 bg-white/80 px-4 py-3 outline-none"
@@ -274,7 +307,7 @@ export default function PlanmonStudio() {
                 </button>
               </div>
               <div className="mt-5 space-y-4">
-                {subjects.map((subject) => (
+                {studioData.subjects.map((subject) => (
                   <div key={subject.id} className="rounded-[1.5rem] border border-[#16324F]/8 bg-white/70 p-4">
                     <div className="flex items-center justify-between">
                       <div>
@@ -299,12 +332,10 @@ export default function PlanmonStudio() {
             </article>
 
             <article className="glass-card rounded-[2rem] p-6">
-              <div>
-                <p className="text-sm font-semibold tracking-[0.25em] text-[#5C7C92] uppercase">
-                  Tasks
-                </p>
-                <h2 className="mt-2 font-display text-3xl text-[#16324F]">오늘의 공부</h2>
-              </div>
+              <p className="text-sm font-semibold tracking-[0.25em] text-[#5C7C92] uppercase">
+                Tasks
+              </p>
+              <h2 className="mt-2 font-display text-3xl text-[#16324F]">오늘의 공부</h2>
               <div className="mt-5 grid gap-3 sm:grid-cols-[1fr_140px_auto]">
                 <input
                   className="rounded-[1.2rem] border border-[#16324F]/10 bg-white/80 px-4 py-3 outline-none"
@@ -317,7 +348,7 @@ export default function PlanmonStudio() {
                   onChange={(event) => setSelectedSubject(event.target.value)}
                   value={selectedSubject}
                 >
-                  {subjects.map((subject) => (
+                  {studioData.subjects.map((subject) => (
                     <option key={subject.id} value={subject.name}>
                       {subject.name}
                     </option>
@@ -332,7 +363,7 @@ export default function PlanmonStudio() {
                 </button>
               </div>
               <div className="mt-5 space-y-3">
-                {tasks.map((task) => (
+                {studioData.tasks.map((task) => (
                   <button
                     key={task.id}
                     className={`flex w-full items-center justify-between rounded-[1.5rem] border px-4 py-4 text-left ${
