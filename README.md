@@ -1,36 +1,50 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Planmon
 
-## Getting Started
+Planmon is a branded study web app concept built for student growth, character collection, and premium plan conversion.
 
-First, run the development server:
+## Included
+
+- Brand landing page
+- Premium character section
+- Pricing section
+- Dashboard-style MVP preview
+- Interactive timer and XP demo
+- SEO metadata, manifest, robots, sitemap
+- Vercel-ready Next.js setup
+
+## Run locally
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open `http://localhost:3000`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Suggested next integrations
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Supabase for auth and data
+- Toss Payments or Stripe for subscriptions
+- Real study timer and XP persistence
+- User dashboard and onboarding flow
 
-## Learn More
+## Deploy on Render
 
-To learn more about Next.js, take a look at the following resources:
+This project is currently configured for a Render `Static Site`.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Build Command: `npm install && npm run build`
+- Publish Directory: `out`
+- Start Date Reference: April 23, 2026
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+You can also use the included `render.yaml`.
 
-## Deploy on Vercel
+## If you want the full app later
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The current deployment mode is static because it is the fastest path to getting the brand live.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+When you add any of the following, switch to a Render `Web Service`:
+
+- real login
+- database writes
+- payment webhooks
+- AI features with server-side secrets

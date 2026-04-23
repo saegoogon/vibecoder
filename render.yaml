@@ -1,0 +1,6 @@
+services:
+  - type: static_site
+    name: planmon
+    env: static
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./out
