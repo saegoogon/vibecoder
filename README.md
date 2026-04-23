@@ -9,6 +9,7 @@ Planmon is a branded study web app concept built for student growth, character c
 - Pricing section
 - Dashboard-style MVP preview
 - Interactive timer and XP demo
+- Local-first start page with onboarding and dashboard
 - SEO metadata, manifest, robots, sitemap
 - Vercel-ready Next.js setup
 
@@ -20,6 +21,8 @@ npm run dev
 ```
 
 Open `http://localhost:3000`.
+
+Visit `http://localhost:3000/start` for the interactive dashboard flow.
 
 ## Suggested next integrations
 
@@ -48,3 +51,7 @@ When you add any of the following, switch to a Render `Web Service`:
 - database writes
 - payment webhooks
 - AI features with server-side secrets
+
+## Environment template
+
+See `.env.example` for the values to use when you connect Supabase or Stripe later.

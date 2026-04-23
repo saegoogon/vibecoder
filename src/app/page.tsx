@@ -1,9 +1,10 @@
+import Link from "next/link";
 import PlanmonDemo from "@/components/planmon-demo";
 
 const highlights = [
   "시험 일정, 할 일, 공부 시간 기록을 한 화면에서 관리",
   "공부할수록 캐릭터가 성장하는 보상형 루프",
-  "학생도 부담 없는 Free / Pro / Pro+ 플랜 구성",
+  "학생도 부담 없는 Free, Pro, Pro+ 플랜 구성",
 ];
 
 const stats = [
@@ -15,19 +16,19 @@ const stats = [
 const features = [
   {
     title: "플랜보드",
-    body: "시험 일정, 수행평가, 오늘 할 일을 카드처럼 정리해서 머릿속을 비워주는 홈 화면.",
+    body: "시험 일정, 수행평가, 오늘 할 일을 카드처럼 정리해서 머릿속을 비워주는 홈 화면입니다.",
   },
   {
     title: "포커스 타이머",
-    body: "집중 세션을 돌릴 때마다 경험치를 획득하고, 과목별 공부 시간이 자동 누적됩니다.",
+    body: "집중 세션을 돌릴 때마다 경험치를 얻고, 과목별 공부 시간이 자동으로 쌓입니다.",
   },
   {
     title: "성장 리포트",
-    body: "이번 주에 무엇을 잘했고 어디서 흔들렸는지 한눈에 보여주는 주간 분석 리포트.",
+    body: "이번 주에 무엇을 잘했고 어디서 흔들렸는지 한눈에 보여주는 주간 분석 리포트입니다.",
   },
   {
     title: "플랜몬 진화",
-    body: "연속 공부와 할 일 달성으로 외형, 배지, 테마가 바뀌는 캐릭터 성장 시스템.",
+    body: "연속 공부와 할 일 달성으로 외형, 배지, 테마가 바뀌는 캐릭터 성장 시스템입니다.",
   },
 ];
 
@@ -50,7 +51,7 @@ const plans = [
     name: "Pro+",
     price: "월 7,900원",
     tag: "최상위",
-    description: "AI 추천과 시즌 한정 보상까지 넣은 확장형",
+    description: "AI 추천과 시즌 보상을 넣은 확장형",
     items: ["AI 공부 루틴 추천", "복습 플래너", "PDF 리포트", "한정 캐릭터 루미"],
   },
 ];
@@ -101,39 +102,6 @@ const taskPreview = [
   { task: "사회 수행평가 초안", done: false },
 ];
 
-function CharacterCard({
-  name,
-  tier,
-  description,
-  colors,
-  face,
-}: (typeof characters)[number]) {
-  return (
-    <article className="glass-card character-glow rounded-[2rem] p-6">
-      <div
-        className="floating relative mx-auto mb-6 flex h-44 w-full max-w-[15rem] items-center justify-center rounded-[2rem]"
-        style={{
-          background: `radial-gradient(circle at top, ${colors[1]}, transparent 60%), linear-gradient(180deg, ${colors[0]}, ${colors[1]})`,
-        }}
-      >
-        <div className="absolute top-4 left-4 rounded-full bg-white/25 px-3 py-1 text-xs font-semibold tracking-[0.25em] text-white uppercase">
-          {tier}
-        </div>
-        <CharacterAvatar face={face} />
-      </div>
-      <div className="space-y-3">
-        <div className="flex items-center justify-between gap-4">
-          <h3 className="font-display text-3xl text-[#16324F]">{name}</h3>
-          <span className="rounded-full bg-[#16324F] px-3 py-1 text-xs font-semibold text-white">
-            {tier}
-          </span>
-        </div>
-        <p className="text-sm leading-7 text-[#355070]">{description}</p>
-      </div>
-    </article>
-  );
-}
-
 function CharacterAvatar({ face }: { face: string }) {
   const isFox = face === "fox";
   const isNova = face === "nova";
@@ -143,8 +111,8 @@ function CharacterAvatar({ face }: { face: string }) {
     <div className="relative flex h-32 w-32 items-center justify-center">
       {isFairy ? (
         <>
-          <div className="pulse-soft absolute top-5 left-1/2 h-14 w-14 -translate-x-1/2 rounded-full bg-white/25 blur-md" />
-          <div className="absolute top-1 left-1/2 h-8 w-20 -translate-x-1/2 rounded-full bg-white/35 blur-lg" />
+          <div className="pulse-soft absolute left-1/2 top-5 h-14 w-14 -translate-x-1/2 rounded-full bg-white/25 blur-md" />
+          <div className="absolute left-1/2 top-1 h-8 w-20 -translate-x-1/2 rounded-full bg-white/35 blur-lg" />
         </>
       ) : null}
       <div
@@ -186,6 +154,39 @@ function CharacterAvatar({ face }: { face: string }) {
   );
 }
 
+function CharacterCard({
+  name,
+  tier,
+  description,
+  colors,
+  face,
+}: (typeof characters)[number]) {
+  return (
+    <article className="glass-card character-glow rounded-[2rem] p-6">
+      <div
+        className="floating relative mx-auto mb-6 flex h-44 w-full max-w-[15rem] items-center justify-center rounded-[2rem]"
+        style={{
+          background: `radial-gradient(circle at top, ${colors[1]}, transparent 60%), linear-gradient(180deg, ${colors[0]}, ${colors[1]})`,
+        }}
+      >
+        <div className="absolute left-4 top-4 rounded-full bg-white/25 px-3 py-1 text-xs font-semibold tracking-[0.25em] text-white uppercase">
+          {tier}
+        </div>
+        <CharacterAvatar face={face} />
+      </div>
+      <div className="space-y-3">
+        <div className="flex items-center justify-between gap-4">
+          <h3 className="font-display text-3xl text-[#16324F]">{name}</h3>
+          <span className="rounded-full bg-[#16324F] px-3 py-1 text-xs font-semibold text-white">
+            {tier}
+          </span>
+        </div>
+        <p className="text-sm leading-7 text-[#355070]">{description}</p>
+      </div>
+    </article>
+  );
+}
+
 export default function Home() {
   return (
     <main className="mx-auto flex w-full max-w-7xl flex-1 flex-col px-5 pb-20 pt-6 sm:px-8 lg:px-10">
@@ -212,9 +213,12 @@ export default function Home() {
             <a className="rounded-full px-4 py-2 hover:bg-white/70" href="#plans">
               요금제
             </a>
-            <a className="rounded-full bg-[#16324F] px-4 py-2 text-white hover:-translate-y-0.5" href="#launch">
-              배포 시작
-            </a>
+            <Link
+              className="rounded-full bg-[#16324F] px-4 py-2 text-white hover:-translate-y-0.5"
+              href="/start"
+            >
+              시작하기
+            </Link>
           </nav>
         </div>
       </header>
@@ -237,12 +241,12 @@ export default function Home() {
             </p>
           </div>
           <div className="flex flex-col gap-3 sm:flex-row">
-            <a
+            <Link
               className="inline-flex items-center justify-center rounded-full bg-[#16324F] px-7 py-4 text-base font-semibold text-white shadow-[0_16px_35px_rgba(22,50,79,0.2)] hover:-translate-y-1"
-              href="#launch"
+              href="/start"
             >
               무료로 시작하기
-            </a>
+            </Link>
             <a
               className="inline-flex items-center justify-center rounded-full border border-[#16324F]/10 bg-white/80 px-7 py-4 text-base font-semibold text-[#16324F] hover:-translate-y-1"
               href="#characters"
@@ -252,10 +256,7 @@ export default function Home() {
           </div>
           <ul className="grid gap-3 pt-2 text-sm text-[#355070] sm:grid-cols-3">
             {highlights.map((item) => (
-              <li
-                key={item}
-                className="glass-card rounded-[1.5rem] px-4 py-4 leading-6"
-              >
+              <li key={item} className="glass-card rounded-[1.5rem] px-4 py-4 leading-6">
                 {item}
               </li>
             ))}
@@ -366,8 +367,8 @@ export default function Home() {
             </h2>
           </div>
           <p className="max-w-xl text-sm leading-7 text-[#355070]">
-            단순한 체크리스트 앱이 아니라, 학생들이 친구에게 링크를 보내고 싶은
-            감성과 반복 사용 이유를 같이 담았습니다.
+            단순한 체크리스트 앱이 아니라, 학생들이 친구에게 링크를 보내고 싶은 감성과
+            반복 사용 이유를 같이 담았습니다.
           </p>
         </div>
         <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
@@ -467,16 +468,16 @@ export default function Home() {
                   </li>
                 ))}
               </ul>
-              <a
+              <Link
                 className={`mt-7 inline-flex w-full items-center justify-center rounded-full px-5 py-4 text-sm font-semibold ${
                   index === 1
                     ? "bg-[#FFBF69] text-[#16324F]"
                     : "bg-[#16324F] text-white hover:-translate-y-0.5"
                 }`}
-                href="#launch"
+                href="/start"
               >
                 {index === 0 ? "무료로 시작" : `${plan.name} 선택`}
-              </a>
+              </Link>
             </article>
           ))}
         </div>
@@ -503,23 +504,23 @@ export default function Home() {
           </div>
         </article>
 
-        <article id="launch" className="rounded-[2.5rem] bg-[#16324F] p-7 text-white shadow-[0_25px_60px_rgba(22,50,79,0.24)]">
+        <article className="rounded-[2.5rem] bg-[#16324F] p-7 text-white shadow-[0_25px_60px_rgba(22,50,79,0.24)]">
           <p className="text-sm font-semibold tracking-[0.25em] text-white/65 uppercase">
             Deployment Stack
           </p>
           <h2 className="mt-3 font-display text-4xl">실전 배포 스택도 이미 맞춰둔 상태</h2>
           <p className="mt-4 max-w-2xl text-sm leading-7 text-white/82">
-            이 프로젝트는 Next.js 기반이라 Vercel에 바로 올릴 수 있고, 다음 단계로
-            Supabase 로그인과 Toss Payments 또는 Stripe 결제를 자연스럽게 붙일 수 있습니다.
+            이 프로젝트는 Next.js 기반이라 Render Static Site로 바로 올릴 수 있고,
+            다음 단계로는 Supabase 로그인과 결제 시스템을 자연스럽게 붙일 수 있습니다.
           </p>
           <div className="mt-6 grid gap-4 sm:grid-cols-2">
             {[
               "Next.js App Router",
               "Tailwind CSS v4",
-              "Vercel 즉시 배포",
+              "Render 즉시 배포",
               "Supabase 연동 준비",
               "결제 플랜 확장 가능",
-              "학교 친구 테스트용 랜딩 페이지 포함",
+              "학교 친구 테스트용 시작 페이지 포함",
             ].map((item) => (
               <div key={item} className="rounded-[1.5rem] bg-white/10 px-4 py-4 text-sm">
                 {item}
@@ -527,21 +528,19 @@ export default function Home() {
             ))}
           </div>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <a
+            <Link
               className="inline-flex items-center justify-center rounded-full bg-[#FFBF69] px-6 py-4 text-sm font-semibold text-[#16324F] hover:-translate-y-0.5"
-              href="https://vercel.com/new"
-              target="_blank"
-              rel="noreferrer"
+              href="/start"
             >
-              Vercel로 배포하기
-            </a>
+              데모 바로 시작
+            </Link>
             <a
               className="inline-flex items-center justify-center rounded-full border border-white/15 px-6 py-4 text-sm font-semibold text-white hover:-translate-y-0.5"
-              href="https://supabase.com"
+              href="https://render.com/docs/deploy-nextjs-app"
               target="_blank"
               rel="noreferrer"
             >
-              Supabase 연결 준비
+              Render 배포 문서
             </a>
           </div>
         </article>
