@@ -1,43 +1,35 @@
 import type { Metadata } from "next";
-import { Baloo_2, Plus_Jakarta_Sans } from "next/font/google";
+import { Black_Han_Sans, Noto_Sans_KR } from "next/font/google";
 import "./globals.css";
 
-const plusJakartaSans = Plus_Jakarta_Sans({
-  variable: "--font-plus-jakarta-sans",
+const notoSansKr = Noto_Sans_KR({
+  variable: "--font-noto-sans-kr",
   subsets: ["latin"],
 });
 
-const baloo = Baloo_2({
-  variable: "--font-baloo",
+const blackHanSans = Black_Han_Sans({
+  variable: "--font-black-han-sans",
   subsets: ["latin"],
-  weight: ["600", "700"],
+  weight: ["400"],
 });
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://planmon.onrender.com"),
-  title: "Planmon | Study, Grow, Unlock",
+  title: "플랜몬 | 공부가 남는 한국어 학습 서비스",
   description:
-    "Planmon is a study growth service where your character evolves as you complete tasks, log sessions, and keep your streak alive.",
-  keywords: [
-    "Planmon",
-    "study planner",
-    "study tracker",
-    "student productivity",
-    "character growth app",
-  ],
+    "플랜몬은 공부 기록, 성장형 캐릭터, 한국어 중심 UX를 묶은 학습 서비스입니다.",
+  keywords: ["플랜몬", "공부 관리", "학습 플래너", "토스페이먼츠", "수파베이스"],
   openGraph: {
-    title: "Planmon | Study, Grow, Unlock",
-    description:
-      "A study growth service where your character evolves as you complete tasks and keep your streak alive.",
+    title: "플랜몬 | 공부가 남는 한국어 학습 서비스",
+    description: "공부 기록, 캐릭터 성장, 실제 결제 흐름까지 들어간 한국어 학습 서비스.",
     images: ["/og-planmon.svg"],
     type: "website",
     locale: "ko_KR",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Planmon | Study, Grow, Unlock",
-    description:
-      "A branded student study service with character growth, premium plans, and a launch-ready landing page.",
+    title: "플랜몬 | 공부가 남는 한국어 학습 서비스",
+    description: "브랜드, 대시보드, 결제, DB까지 준비된 학습 서비스.",
     images: ["/og-planmon.svg"],
   },
   icons: {
@@ -55,7 +47,7 @@ export default function RootLayout({
   return (
     <html
       lang="ko"
-      className={`${plusJakartaSans.variable} ${baloo.variable} h-full antialiased`}
+      className={`${notoSansKr.variable} ${blackHanSans.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">{children}</body>
     </html>

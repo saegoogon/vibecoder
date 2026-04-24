@@ -1,23 +1,24 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f6fbf6;
-  --foreground: #16324f;
-  --surface: rgba(255, 255, 255, 0.74);
-  --surface-strong: #ffffff;
-  --line: rgba(27, 73, 101, 0.12);
-  --mint: #2ec4b6;
-  --navy: #1b4965;
-  --gold: #ffbf69;
-  --coral: #ff6b6b;
-  --shadow: 0 18px 60px rgba(27, 73, 101, 0.12);
+  --background: #f7f2e8;
+  --foreground: #17273a;
+  --surface: rgba(255, 251, 244, 0.92);
+  --line: rgba(23, 39, 58, 0.12);
+  --ink: #17273a;
+  --mint: #26c3a7;
+  --navy: #16324f;
+  --gold: #ffb24b;
+  --rose: #ff746c;
+  --sky: #79b9ff;
+  --paper-shadow: 0 18px 50px rgba(23, 39, 58, 0.08);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-plus-jakarta-sans);
-  --font-display: var(--font-baloo);
+  --font-sans: var(--font-noto-sans-kr);
+  --font-display: var(--font-black-han-sans);
 }
 
 * {
@@ -29,17 +30,22 @@ html {
 }
 
 body {
+  min-width: 320px;
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-plus-jakarta-sans), sans-serif;
+  font-family: var(--font-noto-sans-kr), sans-serif;
   background-image:
-    radial-gradient(circle at top left, rgba(46, 196, 182, 0.16), transparent 24%),
-    radial-gradient(circle at top right, rgba(255, 191, 105, 0.22), transparent 20%),
-    linear-gradient(180deg, #f7fff7 0%, #eff8f2 38%, #f8f5ef 100%);
+    radial-gradient(circle at 8% 10%, rgba(38, 195, 167, 0.18), transparent 20%),
+    radial-gradient(circle at 92% 8%, rgba(255, 178, 75, 0.22), transparent 18%),
+    radial-gradient(circle at 82% 60%, rgba(121, 185, 255, 0.16), transparent 16%),
+    linear-gradient(180deg, #f8f2e8 0%, #f6ede0 48%, #f3ebdf 100%);
 }
 
 a,
-button {
+button,
+input,
+textarea,
+select {
   transition:
     transform 180ms ease,
     box-shadow 180ms ease,
@@ -49,15 +55,185 @@ button {
 }
 
 ::selection {
-  background: rgba(46, 196, 182, 0.28);
-  color: #10263d;
+  background: rgba(38, 195, 167, 0.34);
+  color: #111d2b;
 }
 
-.glass-card {
-  background: var(--surface);
-  border: 1px solid var(--line);
-  box-shadow: var(--shadow);
-  backdrop-filter: blur(16px);
+.site-shell {
+  position: relative;
+}
+
+.site-shell::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(23, 39, 58, 0.028) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(23, 39, 58, 0.028) 1px, transparent 1px);
+  background-size: 26px 26px;
+  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.85), transparent 92%);
+}
+
+.poster-card {
+  position: relative;
+  overflow: hidden;
+  border: 2px solid rgba(23, 39, 58, 0.1);
+  border-radius: 2rem;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(255, 249, 240, 0.96)),
+    var(--surface);
+  box-shadow: var(--paper-shadow);
+}
+
+.poster-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at top right, rgba(255, 178, 75, 0.18), transparent 22%),
+    radial-gradient(circle at left bottom, rgba(38, 195, 167, 0.16), transparent 24%);
+}
+
+.panel-outline {
+  border: 2px solid rgba(23, 39, 58, 0.1);
+  border-radius: 1.75rem;
+  background: rgba(255, 253, 247, 0.88);
+  box-shadow: 0 16px 35px rgba(23, 39, 58, 0.06);
+}
+
+.hard-card {
+  border: 2px solid var(--ink);
+  border-radius: 1.75rem;
+  background: #fffdf8;
+  box-shadow: 10px 10px 0 rgba(23, 39, 58, 0.95);
+}
+
+.section-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  border: 2px solid rgba(23, 39, 58, 0.08);
+  background: rgba(255, 255, 255, 0.75);
+  border-radius: 999px;
+  padding: 0.65rem 1rem;
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #38506b;
+}
+
+.sticker-button {
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  box-shadow: 0 8px 0 rgba(23, 39, 58, 0.95);
+}
+
+.sticker-button:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 0 rgba(23, 39, 58, 0.95);
+}
+
+.ghost-button {
+  border: 2px solid rgba(23, 39, 58, 0.12);
+  background: rgba(255, 255, 255, 0.75);
+  border-radius: 999px;
+}
+
+.note-label {
+  display: inline-block;
+  border-radius: 999px;
+  padding: 0.45rem 0.8rem;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.note-label.mint {
+  background: rgba(38, 195, 167, 0.14);
+  color: #0b6a59;
+}
+
+.note-label.gold {
+  background: rgba(255, 178, 75, 0.18);
+  color: #9a5400;
+}
+
+.note-label.navy {
+  background: rgba(22, 50, 79, 0.1);
+  color: #16324f;
+}
+
+.metric-box {
+  min-height: 8.5rem;
+  border-radius: 1.6rem;
+  padding: 1.2rem;
+  box-shadow: 0 16px 30px rgba(23, 39, 58, 0.08);
+}
+
+.metric-box strong {
+  display: block;
+  margin-top: 0.75rem;
+  font-size: 2rem;
+  line-height: 1;
+  font-weight: 900;
+}
+
+.paper-item {
+  display: flex;
+  gap: 0.85rem;
+  border: 2px solid rgba(23, 39, 58, 0.08);
+  border-radius: 1.35rem;
+  background: rgba(255, 255, 255, 0.82);
+  padding: 1rem;
+}
+
+.marquee-line {
+  overflow: hidden;
+  white-space: nowrap;
+  border-block: 2px solid rgba(23, 39, 58, 0.1);
+  background: rgba(255, 255, 255, 0.55);
+}
+
+.marquee-line span {
+  display: inline-block;
+  padding: 0.9rem 1rem;
+  font-size: 0.8rem;
+  font-weight: 900;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: #38506b;
+  animation: marquee 18s linear infinite;
+}
+
+.form-field {
+  width: 100%;
+  border: 2px solid rgba(23, 39, 58, 0.1);
+  border-radius: 1.2rem;
+  background: rgba(255, 255, 255, 0.82);
+  padding: 0.95rem 1rem;
+  outline: none;
+}
+
+.form-field:focus {
+  border-color: rgba(38, 195, 167, 0.8);
+  box-shadow: 0 0 0 4px rgba(38, 195, 167, 0.14);
+}
+
+.floating {
+  animation: float 4.2s ease-in-out infinite;
+}
+
+.floating-delay {
+  animation: float 4.8s ease-in-out infinite;
+  animation-delay: 0.6s;
+}
+
+.pulse-soft {
+  animation: pulse-soft 2.8s ease-in-out infinite;
 }
 
 .character-glow {
@@ -74,23 +250,10 @@ button {
   opacity: 0.65;
 }
 
-.floating {
-  animation: float 4.2s ease-in-out infinite;
-}
-
-.floating-delay {
-  animation: float 4.8s ease-in-out infinite;
-  animation-delay: 0.6s;
-}
-
-.pulse-soft {
-  animation: pulse-soft 2.8s ease-in-out infinite;
-}
-
 @keyframes float {
   0%,
   100% {
-    transform: translateY(0px);
+    transform: translateY(0);
   }
   50% {
     transform: translateY(-10px);
@@ -106,5 +269,14 @@ button {
   50% {
     transform: scale(1.04);
     opacity: 0.92;
+  }
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
   }
 }

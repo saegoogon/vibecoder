@@ -7,6 +7,7 @@
 - `/` 브랜드 랜딩 페이지
 - `/start` 학습 대시보드
 - `/checkout` 토스 결제 시작 페이지
+- `/setup` 환경변수와 서비스 연결 상태 확인 페이지
 - `/payments/success` 결제 승인 완료 페이지
 - `/payments/fail` 결제 실패 페이지
 
