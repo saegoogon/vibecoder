@@ -20,7 +20,7 @@ export default function CheckoutClient({ initialPlan, tossReady }: Props) {
 
   const handleCheckout = async () => {
     if (!tossReady) {
-      setStatus("토스페이먼츠 키가 아직 연결되지 않았어요. 먼저 /setup 페이지에서 상태를 확인해 주세요.");
+      setStatus("토스 결제 키가 아직 연결되지 않았어요. 먼저 /setup 페이지에서 상태를 확인해 주세요.");
       return;
     }
 
@@ -56,11 +56,11 @@ export default function CheckoutClient({ initialPlan, tossReady }: Props) {
             <h1 className="mt-4 font-display text-5xl leading-none text-[#17273a]">
               결제도
               <br />
-              브랜드처럼 보여야 해요.
+              브랜드 경험처럼 보여야 해요
             </h1>
             <p className="mt-5 max-w-2xl text-sm leading-8 text-[#41556b]">
-              한국 사용자에게 가장 익숙한 토스 결제 흐름에 맞춘 업그레이드 페이지입니다.
-              계획을 고르고, 정보 입력 후, 토스 결제창으로 자연스럽게 넘어갑니다.
+              학생 사용자에게 부담 없이 보이도록 구성한 업그레이드 페이지입니다. 플랜을 고르고
+              정보 입력 후 실제 토스 결제창으로 자연스럽게 넘어가도록 설계했습니다.
             </p>
           </div>
           <Link className="ghost-button px-5 py-3 text-sm font-bold text-[#17273a]" href="/setup">
@@ -71,7 +71,8 @@ export default function CheckoutClient({ initialPlan, tossReady }: Props) {
 
       {!tossReady ? (
         <section className="panel-outline mt-6 px-5 py-4 text-sm leading-7 text-[#7a4d00]">
-          토스페이먼츠 시크릿 키가 아직 없어 실제 결제는 막아둔 상태예요. `/setup`에서 상태를 확인한 뒤 다시 시도하면 됩니다.
+          토스 결제 키가 아직 없어서 실제 결제는 막아 둔 상태예요. `/setup`에서 준비 상태를
+          확인한 뒤 다시 시도하면 됩니다.
         </section>
       ) : null}
 
@@ -98,7 +99,7 @@ export default function CheckoutClient({ initialPlan, tossReady }: Props) {
                     <div className="flex items-center justify-between">
                       <div>
                         <p
-                          className={`text-xs tracking-[0.25em] uppercase ${
+                          className={`text-xs uppercase tracking-[0.25em] ${
                             active ? "text-white/70" : "text-[#5C7C92]"
                           }`}
                         >
@@ -114,11 +115,7 @@ export default function CheckoutClient({ initialPlan, tossReady }: Props) {
                         {plan.priceText}
                       </span>
                     </div>
-                    <p
-                      className={`mt-4 text-sm leading-7 ${
-                        active ? "text-white/82" : "text-[#41556b]"
-                      }`}
-                    >
+                    <p className={`mt-4 text-sm leading-7 ${active ? "text-white/82" : "text-[#41556b]"}`}>
                       {plan.summary}
                     </p>
                   </button>
@@ -132,21 +129,29 @@ export default function CheckoutClient({ initialPlan, tossReady }: Props) {
           <div className="mt-5 space-y-4">
             <label className="block">
               <span className="mb-2 block text-sm font-bold text-[#17273a]">이름</span>
-              <input className="form-field" onChange={(event) => setCustomerName(event.target.value)} value={customerName} />
+              <input
+                className="form-field"
+                onChange={(event) => setCustomerName(event.target.value)}
+                value={customerName}
+              />
             </label>
             <label className="block">
               <span className="mb-2 block text-sm font-bold text-[#17273a]">이메일</span>
-              <input className="form-field" onChange={(event) => setCustomerEmail(event.target.value)} value={customerEmail} />
+              <input
+                className="form-field"
+                onChange={(event) => setCustomerEmail(event.target.value)}
+                value={customerEmail}
+              />
             </label>
           </div>
 
           <div className="mt-6 rounded-[1.8rem] bg-[#17273a] p-5 text-white">
-            <p className="text-sm font-bold tracking-[0.25em] text-white/65 uppercase">Selected Plan</p>
+            <p className="text-sm font-bold uppercase tracking-[0.25em] text-white/65">Selected Plan</p>
             <h3 className="mt-2 font-display text-4xl leading-none">{selectedPlan.name}</h3>
             <p className="mt-2 text-lg text-white/85">{selectedPlan.priceText}</p>
             <ul className="mt-5 space-y-3 text-sm text-white/82">
               {selectedPlan.features.map((feature) => (
-                <li key={feature}>{feature}</li>
+                <li key={feature}>• {feature}</li>
               ))}
             </ul>
           </div>

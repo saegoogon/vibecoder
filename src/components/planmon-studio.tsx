@@ -38,7 +38,7 @@ export default function PlanmonStudio() {
     () => getInitialStudioData().subjects[0]?.name || defaultStudioData.subjects[0].name,
   );
   const [deviceId] = useState(getDeviceId);
-  const [syncLabel, setSyncLabel] = useState("브라우저에 저장 중");
+  const [syncLabel, setSyncLabel] = useState("브라우저에만 저장 중");
   const [cloudEnabled, setCloudEnabled] = useState(false);
   const initializedSync = useRef(false);
   const deferredName = useDeferredValue(studioData.studentName);
@@ -61,7 +61,7 @@ export default function PlanmonStudio() {
         if (response.status === 503) {
           if (active) {
             setCloudEnabled(false);
-            setSyncLabel("브라우저 전용 저장");
+            setSyncLabel("브라우저 저장 전용 모드");
           }
           return;
         }
@@ -70,7 +70,7 @@ export default function PlanmonStudio() {
         if (!active) return;
 
         setCloudEnabled(true);
-        setSyncLabel("수파베이스 연결됨");
+        setSyncLabel("클라우드 연결 완료");
 
         if (payload.profile) {
           setStudioData(payload.profile);
@@ -81,7 +81,7 @@ export default function PlanmonStudio() {
       } catch {
         if (active) {
           setCloudEnabled(false);
-          setSyncLabel("브라우저 전용 저장");
+          setSyncLabel("브라우저 저장 전용 모드");
         }
       } finally {
         initializedSync.current = true;
@@ -99,7 +99,7 @@ export default function PlanmonStudio() {
     if (!deviceId || !initializedSync.current || !cloudEnabled) return;
 
     const timer = window.setTimeout(async () => {
-      setSyncLabel("수파베이스 저장 중");
+      setSyncLabel("클라우드에 저장 중");
 
       try {
         const response = await fetch("/api/studio", {
@@ -109,9 +109,9 @@ export default function PlanmonStudio() {
         });
 
         if (!response.ok) throw new Error("save failed");
-        setSyncLabel("수파베이스에 저장됨");
+        setSyncLabel("클라우드 저장 완료");
       } catch {
-        setSyncLabel("브라우저 저장으로 유지됨");
+        setSyncLabel("브라우저 저장으로 전환됨");
       }
     }, 800);
 
@@ -179,8 +179,9 @@ export default function PlanmonStudio() {
               공부 스테이션
             </h1>
             <p className="mt-4 max-w-2xl text-sm leading-7 text-[#41556b]">
-              친구에게 보여주기 좋은 화면으로 다시 정리했습니다. 공부 데이터는 브라우저에 즉시 저장되고,
-              수파베이스가 연결되어 있으면 클라우드에도 함께 반영됩니다.
+              친구에게 보여줘도 촌스럽지 않게, 하지만 바로 이해되는 구조로 정리했습니다.
+              브라우저 저장은 기본으로 되고, Supabase가 연결되면 같은 화면이 클라우드에도
+              저장됩니다.
             </p>
           </div>
           <div className="flex flex-col gap-3 sm:flex-row">
@@ -230,11 +231,11 @@ export default function PlanmonStudio() {
           </div>
 
           <div className="mt-6 rounded-[1.6rem] bg-[#17273a] p-5 text-white">
-            <p className="text-sm font-bold tracking-[0.22em] text-white/60 uppercase">
+            <p className="text-sm font-bold uppercase tracking-[0.22em] text-white/60">
               Character Status
             </p>
             <p className="mt-3 font-display text-4xl">플래니 Lv. {level}</p>
-            <p className="mt-2 text-sm text-white/80">누적 XP {xp}점</p>
+            <p className="mt-2 text-sm text-white/80">누적 XP {xp}</p>
             <div className="mt-4 h-3 rounded-full bg-white/15">
               <div
                 className="h-3 rounded-full bg-[#ffb24b]"
@@ -247,15 +248,15 @@ export default function PlanmonStudio() {
         <div className="grid gap-6">
           <section className="grid gap-4 md:grid-cols-3">
             <div className="metric-box bg-[#26c3a7] text-[#17273a]">
-              <span className="text-xs font-black tracking-[0.2em] uppercase text-[#0d5f53]">완료한 할 일</span>
+              <span className="text-xs font-black uppercase tracking-[0.2em] text-[#0d5f53]">완료한 할 일</span>
               <strong>{completedCount}</strong>
             </div>
             <div className="metric-box bg-[#ffb24b] text-[#17273a]">
-              <span className="text-xs font-black tracking-[0.2em] uppercase text-[#8a4b00]">등록 과목</span>
+              <span className="text-xs font-black uppercase tracking-[0.2em] text-[#8a4b00]">등록 과목</span>
               <strong>{studioData.subjects.length}</strong>
             </div>
             <div className="metric-box bg-[#17273a] text-white">
-              <span className="text-xs font-black tracking-[0.2em] uppercase text-white/60">이번 목표</span>
+              <span className="text-xs font-black uppercase tracking-[0.2em] text-white/60">이번 목표</span>
               <p className="mt-3 text-lg font-bold leading-7">{studioData.goal}</p>
             </div>
           </section>
@@ -349,16 +350,16 @@ export default function PlanmonStudio() {
                           task.done ? "bg-[#26c3a7] text-white" : "bg-[#EEF3F6] text-[#7C8FA2]"
                         }`}
                       >
-                        {task.done ? "✓" : ""}
+                        {task.done ? "완" : ""}
                       </div>
                       <div>
                         <p className="text-sm font-bold text-[#17273a]">{task.text}</p>
-                        <p className="text-xs tracking-[0.2em] text-[#7C8FA2] uppercase">
+                        <p className="text-xs uppercase tracking-[0.2em] text-[#7C8FA2]">
                           {task.subject}
                         </p>
                       </div>
                     </div>
-                    <span className="note-label navy">{task.done ? "완료" : "진행 전"}</span>
+                    <span className="note-label navy">{task.done ? "완료" : "진행 중"}</span>
                   </button>
                 ))}
               </div>

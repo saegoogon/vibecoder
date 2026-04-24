@@ -4,12 +4,12 @@ export const dynamic = "force-static";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Planmon",
-    short_name: "Planmon",
-    description: "A study growth service where characters evolve as students learn.",
+    name: "플랜몬",
+    short_name: "플랜몬",
+    description: "공부할수록 캐릭터와 기록이 함께 성장하는 학습 서비스",
     start_url: "/",
     display: "standalone",
-    background_color: "#f6fbf6",
+    background_color: "#f7f2e8",
     theme_color: "#16324f",
     icons: [
       {

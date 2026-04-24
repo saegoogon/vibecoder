@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
     const parsed = schema.safeParse(body);
 
     if (!parsed.success) {
-      return NextResponse.json({ message: "입력값을 다시 확인해주세요." }, { status: 400 });
+      return NextResponse.json({ message: "입력값을 다시 확인해 주세요." }, { status: 400 });
     }
 
     const checkout = await createTossCheckout(parsed.data);
@@ -45,7 +45,7 @@ export async function POST(request: NextRequest) {
         message:
           error instanceof Error
             ? error.message
-            : "결제 요청 중 알 수 없는 오류가 발생했습니다.",
+            : "결제 요청 중 예상하지 못한 오류가 발생했습니다.",
       },
       { status: 500 },
     );

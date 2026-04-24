@@ -10,7 +10,7 @@ type Props = {
 };
 
 export default function PaymentSuccessClient({ paymentKey, orderId, amount }: Props) {
-  const [message, setMessage] = useState("결제를 확인하고 있어요...");
+  const [message, setMessage] = useState("결제 상태를 확인하고 있어요...");
   const [success, setSuccess] = useState(false);
 
   useEffect(() => {
@@ -39,14 +39,14 @@ export default function PaymentSuccessClient({ paymentKey, orderId, amount }: Pr
         }
 
         setSuccess(true);
-        setMessage("결제가 정상적으로 승인되었어요. 이제 플랜 업그레이드를 적용할 수 있어요.");
+        setMessage("결제가 정상적으로 승인됐어요. 이제 플랜 업그레이드 상태를 적용할 수 있습니다.");
       } catch (error) {
         if (active) {
           setSuccess(false);
           setMessage(
             error instanceof Error
               ? error.message
-              : "결제 승인 중 오류가 발생했습니다.",
+              : "결제 확인 중 오류가 발생했습니다.",
           );
         }
       }
@@ -60,9 +60,9 @@ export default function PaymentSuccessClient({ paymentKey, orderId, amount }: Pr
   }, [amount, orderId, paymentKey]);
 
   return (
-    <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col px-5 pb-20 pt-16 sm:px-8">
-      <section className="glass-card rounded-[2.4rem] p-8 text-center">
-        <p className="text-sm font-semibold tracking-[0.25em] text-[#5C7C92] uppercase">
+    <main className="site-shell mx-auto flex w-full max-w-3xl flex-1 flex-col px-5 pb-20 pt-16 sm:px-8">
+      <section className="poster-card p-8 text-center">
+        <p className="text-sm font-semibold uppercase tracking-[0.25em] text-[#5C7C92]">
           Payment Result
         </p>
         <h1 className="mt-4 font-display text-5xl text-[#16324F]">
@@ -71,13 +71,13 @@ export default function PaymentSuccessClient({ paymentKey, orderId, amount }: Pr
         <p className="mt-5 text-base leading-8 text-[#355070]">{message}</p>
         <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
           <Link
-            className="rounded-full bg-[#16324F] px-6 py-4 text-sm font-semibold text-white hover:-translate-y-0.5"
+            className="sticker-button bg-[#16324F] px-6 py-4 text-sm font-semibold text-white"
             href="/start"
           >
             대시보드로 이동
           </Link>
           <Link
-            className="rounded-full border border-[#16324F]/10 bg-white/80 px-6 py-4 text-sm font-semibold text-[#16324F] hover:-translate-y-0.5"
+            className="ghost-button px-6 py-4 text-sm font-semibold text-[#16324F]"
             href="/checkout"
           >
             결제 페이지로 돌아가기

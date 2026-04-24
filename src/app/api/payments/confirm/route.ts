@@ -45,7 +45,7 @@ export async function POST(request: NextRequest) {
           payment_key: parsed.data.paymentKey,
           metadata: {
             error:
-              error instanceof Error ? error.message : "결제 승인 중 오류가 발생했습니다.",
+              error instanceof Error ? error.message : "결제 확인 중 오류가 발생했습니다.",
           },
         })
         .eq("order_id", parsed.data.orderId);
@@ -56,7 +56,7 @@ export async function POST(request: NextRequest) {
         message:
           error instanceof Error
             ? error.message
-            : "결제 승인 중 오류가 발생했습니다.",
+            : "결제 확인 중 오류가 발생했습니다.",
       },
       { status: 500 },
     );
