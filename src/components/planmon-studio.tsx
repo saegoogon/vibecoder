@@ -9,7 +9,6 @@ const deviceStorageKey = "planmon-device-id";
 
 function getInitialStudioData(): StudioData {
   if (typeof window === "undefined") return defaultStudioData;
-
   const raw = window.localStorage.getItem(storageKey);
   if (!raw) return defaultStudioData;
 
@@ -23,7 +22,6 @@ function getInitialStudioData(): StudioData {
 
 function getDeviceId() {
   if (typeof window === "undefined") return "";
-
   const existing = window.localStorage.getItem(deviceStorageKey);
   if (existing) return existing;
 
@@ -189,7 +187,10 @@ export default function PlanmonStudio() {
             <div className="panel-outline px-4 py-3 text-sm font-bold text-[#17273a]">
               저장 상태: {syncLabel}
             </div>
-            <Link className="sticker-button bg-[#17273a] px-5 py-3 text-center text-sm font-bold text-white" href="/checkout">
+            <Link
+              className="sticker-button bg-[#17273a] px-5 py-3 text-center text-sm font-bold text-white"
+              href="/checkout"
+            >
               플랜 업그레이드
             </Link>
           </div>

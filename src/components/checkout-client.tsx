@@ -97,16 +97,28 @@ export default function CheckoutClient({ initialPlan, tossReady }: Props) {
                   >
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className={`text-xs tracking-[0.25em] uppercase ${active ? "text-white/70" : "text-[#5C7C92]"}`}>
+                        <p
+                          className={`text-xs tracking-[0.25em] uppercase ${
+                            active ? "text-white/70" : "text-[#5C7C92]"
+                          }`}
+                        >
                           {plan.headline}
                         </p>
                         <h2 className="mt-2 font-display text-4xl leading-none">{plan.name}</h2>
                       </div>
-                      <span className={`rounded-full px-3 py-1 text-xs font-semibold ${active ? "bg-white/15 text-white" : "bg-[#17273a] text-white"}`}>
+                      <span
+                        className={`rounded-full px-3 py-1 text-xs font-semibold ${
+                          active ? "bg-white/15 text-white" : "bg-[#17273a] text-white"
+                        }`}
+                      >
                         {plan.priceText}
                       </span>
                     </div>
-                    <p className={`mt-4 text-sm leading-7 ${active ? "text-white/82" : "text-[#41556b]"}`}>
+                    <p
+                      className={`mt-4 text-sm leading-7 ${
+                        active ? "text-white/82" : "text-[#41556b]"
+                      }`}
+                    >
                       {plan.summary}
                     </p>
                   </button>

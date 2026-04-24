@@ -265,9 +265,7 @@ export default function PlanmonHome() {
             <article
               key={plan.code}
               className={`rounded-[2rem] p-7 ${
-                index === 1
-                  ? "hard-card bg-[#17273a] text-white shadow-none"
-                  : "poster-card"
+                index === 1 ? "hard-card bg-[#17273a] text-white shadow-none" : "poster-card"
               }`}
             >
               <div className="flex items-center justify-between">
