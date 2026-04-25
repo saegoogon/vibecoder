@@ -3,7 +3,7 @@ import { appEnv } from "@/lib/env";
 import { planMap, type PlanCode } from "@/lib/planmon";
 
 export function createOrderId() {
-  return `planmon_${Date.now()}_${randomUUID().slice(0, 8)}`;
+  return `cursorverse_${Date.now()}_${randomUUID().slice(0, 8)}`;
 }
 
 function createBasicAuth(secretKey: string) {
@@ -18,7 +18,7 @@ export async function createTossCheckout(input: {
   const plan = planMap[input.planCode];
 
   if (!plan || plan.amount <= 0) {
-    throw new Error("무료 플랜은 결제가 필요하지 않습니다.");
+    throw new Error("무료 Starter 팩은 결제가 필요하지 않습니다.");
   }
 
   if (!appEnv.tossSecretKey) {
@@ -37,7 +37,7 @@ export async function createTossCheckout(input: {
       method: "CARD",
       amount: plan.amount,
       orderId,
-      orderName: `플랜몬 ${plan.name} 이용권`,
+      orderName: `CursorVerse ${plan.name}`,
       successUrl: `${appEnv.siteUrl}/payments/success`,
       failUrl: `${appEnv.siteUrl}/payments/fail`,
       customerEmail: input.customerEmail,
@@ -54,7 +54,7 @@ export async function createTossCheckout(input: {
   return {
     orderId,
     amount: plan.amount,
-    orderName: `플랜몬 ${plan.name} 이용권`,
+    orderName: `CursorVerse ${plan.name}`,
     checkoutUrl: payload.checkout?.url as string,
     raw: payload,
   };

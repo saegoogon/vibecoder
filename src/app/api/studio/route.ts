@@ -6,24 +6,12 @@ import { defaultStudioData } from "@/lib/planmon";
 const payloadSchema = z.object({
   deviceId: z.string().min(8),
   profile: z.object({
-    studentName: z.string(),
-    goal: z.string(),
-    subjects: z.array(
-      z.object({
-        id: z.number(),
-        name: z.string(),
-        examDate: z.string(),
-        progress: z.number(),
-      }),
-    ),
-    tasks: z.array(
-      z.object({
-        id: z.number(),
-        text: z.string(),
-        subject: z.string(),
-        done: z.boolean(),
-      }),
-    ),
+    displayName: z.string(),
+    bio: z.string(),
+    selectedSkin: z.string(),
+    ownedSkins: z.array(z.string()),
+    favoriteSkins: z.array(z.string()),
+    clicks: z.number(),
   }),
 });
 
@@ -40,8 +28,8 @@ export async function GET(request: NextRequest) {
   }
 
   const { data, error } = await supabase
-    .from("planmon_profiles")
-    .select("student_name, goal, subjects, tasks")
+    .from("cursor_profiles")
+    .select("display_name, bio, selected_skin, owned_skins, favorite_skins, clicks")
     .eq("device_id", deviceId)
     .maybeSingle();
 
@@ -55,10 +43,12 @@ export async function GET(request: NextRequest) {
 
   return NextResponse.json({
     profile: {
-      studentName: data.student_name || defaultStudioData.studentName,
-      goal: data.goal || defaultStudioData.goal,
-      subjects: data.subjects || defaultStudioData.subjects,
-      tasks: data.tasks || defaultStudioData.tasks,
+      displayName: data.display_name || defaultStudioData.displayName,
+      bio: data.bio || defaultStudioData.bio,
+      selectedSkin: data.selected_skin || defaultStudioData.selectedSkin,
+      ownedSkins: data.owned_skins || defaultStudioData.ownedSkins,
+      favoriteSkins: data.favorite_skins || defaultStudioData.favoriteSkins,
+      clicks: data.clicks || defaultStudioData.clicks,
     },
   });
 }
@@ -74,18 +64,20 @@ export async function POST(request: NextRequest) {
   const parsed = payloadSchema.safeParse(json);
 
   if (!parsed.success) {
-    return NextResponse.json({ message: "잘못된 요청 형식입니다." }, { status: 400 });
+    return NextResponse.json({ message: "요청 형식이 올바르지 않습니다." }, { status: 400 });
   }
 
   const { deviceId, profile } = parsed.data;
 
-  const { error } = await supabase.from("planmon_profiles").upsert(
+  const { error } = await supabase.from("cursor_profiles").upsert(
     {
       device_id: deviceId,
-      student_name: profile.studentName,
-      goal: profile.goal,
-      subjects: profile.subjects,
-      tasks: profile.tasks,
+      display_name: profile.displayName,
+      bio: profile.bio,
+      selected_skin: profile.selectedSkin,
+      owned_skins: profile.ownedSkins,
+      favorite_skins: profile.favoriteSkins,
+      clicks: profile.clicks,
     },
     { onConflict: "device_id" },
   );

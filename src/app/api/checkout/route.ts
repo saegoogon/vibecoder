@@ -23,7 +23,7 @@ export async function POST(request: NextRequest) {
     const supabase = getSupabaseAdmin();
 
     if (supabase) {
-      await supabase.from("planmon_orders").insert({
+      await supabase.from("cursor_orders").insert({
         order_id: checkout.orderId,
         plan_code: parsed.data.planCode,
         amount: checkout.amount,

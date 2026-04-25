@@ -30,24 +30,15 @@ export default function PaymentSuccessClient({ paymentKey, orderId, amount }: Pr
 
         const payload = (await response.json()) as { message?: string };
 
-        if (!active) {
-          return;
-        }
-
-        if (!response.ok) {
-          throw new Error(payload.message || "결제 승인에 실패했습니다.");
-        }
+        if (!active) return;
+        if (!response.ok) throw new Error(payload.message || "결제 승인에 실패했습니다.");
 
         setSuccess(true);
-        setMessage("결제가 정상적으로 승인됐어요. 이제 플랜 업그레이드 상태를 적용할 수 있습니다.");
+        setMessage("프리미엄 커서 팩 결제가 정상적으로 승인됐어요. 이제 잠겨 있던 스킨을 열 수 있습니다.");
       } catch (error) {
         if (active) {
           setSuccess(false);
-          setMessage(
-            error instanceof Error
-              ? error.message
-              : "결제 확인 중 오류가 발생했습니다.",
-          );
+          setMessage(error instanceof Error ? error.message : "결제 확인 중 오류가 발생했습니다.");
         }
       }
     };
@@ -65,21 +56,15 @@ export default function PaymentSuccessClient({ paymentKey, orderId, amount }: Pr
         <p className="text-sm font-semibold uppercase tracking-[0.25em] text-[#5C7C92]">
           Payment Result
         </p>
-        <h1 className="mt-4 font-display text-5xl text-[#16324F]">
-          {success ? "결제 완료" : "결제 확인 중"}
+        <h1 className="mt-4 font-display text-5xl text-[#09111f]">
+          {success ? "프리미엄 팩 결제 완료" : "결제 확인 중"}
         </h1>
         <p className="mt-5 text-base leading-8 text-[#355070]">{message}</p>
         <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
-          <Link
-            className="sticker-button bg-[#16324F] px-6 py-4 text-sm font-semibold text-white"
-            href="/start"
-          >
-            대시보드로 이동
+          <Link className="sticker-button bg-[#09111f] px-6 py-4 text-sm font-semibold text-white" href="/start">
+            작업실로 이동
           </Link>
-          <Link
-            className="ghost-button px-6 py-4 text-sm font-semibold text-[#16324F]"
-            href="/checkout"
-          >
+          <Link className="ghost-button px-6 py-4 text-sm font-semibold text-[#09111f]" href="/checkout">
             결제 페이지로 돌아가기
           </Link>
         </div>

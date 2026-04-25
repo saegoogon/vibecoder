@@ -4,13 +4,13 @@ export const dynamic = "force-static";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "플랜몬",
-    short_name: "플랜몬",
-    description: "공부할수록 캐릭터와 기록이 함께 성장하는 학습 서비스",
+    name: "CursorVerse",
+    short_name: "CursorVerse",
+    description: "마우스 커서 스킨을 고르고 바로 적용하는 커서 갤러리 서비스",
     start_url: "/",
     display: "standalone",
-    background_color: "#f7f2e8",
-    theme_color: "#16324f",
+    background_color: "#f4f7fb",
+    theme_color: "#09111f",
     icons: [
       {
         src: "/favicon.ico",

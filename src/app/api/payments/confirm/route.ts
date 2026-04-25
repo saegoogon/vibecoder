@@ -23,7 +23,7 @@ export async function POST(request: NextRequest) {
 
     if (supabase) {
       await supabase
-        .from("planmon_orders")
+        .from("cursor_orders")
         .update({
           payment_status: "DONE",
           payment_key: parsed.data.paymentKey,
@@ -39,7 +39,7 @@ export async function POST(request: NextRequest) {
 
     if (supabase) {
       await supabase
-        .from("planmon_orders")
+        .from("cursor_orders")
         .update({
           payment_status: "FAILED",
           payment_key: parsed.data.paymentKey,
