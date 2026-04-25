@@ -11,8 +11,8 @@ type Props = {
 
 export default function CheckoutClient({ initialPlan, tossReady }: Props) {
   const [planCode, setPlanCode] = useState<PlanCode>(initialPlan);
-  const [customerName, setCustomerName] = useState("김커서");
-  const [customerEmail, setCustomerEmail] = useState("cursor@example.com");
+  const [customerName, setCustomerName] = useState("김포인터");
+  const [customerEmail, setCustomerEmail] = useState("pointer@example.com");
   const [status, setStatus] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
@@ -20,7 +20,7 @@ export default function CheckoutClient({ initialPlan, tossReady }: Props) {
 
   const handleCheckout = async () => {
     if (!tossReady) {
-      setStatus("토스 결제 키가 아직 연결되지 않았어요. 먼저 /setup에서 상태를 확인해 주세요.");
+      setStatus("토스 결제 키가 아직 연결되지 않았습니다. 먼저 /setup에서 상태를 확인해 주세요.");
       return;
     }
 
@@ -52,34 +52,34 @@ export default function CheckoutClient({ initialPlan, tossReady }: Props) {
       <header className="poster-card px-6 py-7">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <div className="section-chip">Premium Cursor Packs</div>
-            <h1 className="mt-4 font-display text-5xl leading-none text-[#09111f]">
-              마음에 드는 커서를
+            <div className="section-chip">premium packs</div>
+            <h1 className="mt-4 font-display text-5xl leading-none text-white">
+              좋아하는 커서를
               <br />
-              계속 쓰고 싶다면
+              오래 쓰고 싶다면
             </h1>
-            <p className="mt-5 max-w-2xl text-sm leading-8 text-[#41556b]">
-              CursorVerse의 프리미엄 팩은 더 강한 인상의 커서 스킨과 보관함 기능을 여는
-              업그레이드 상품입니다. 결제 이후에는 해금된 팩을 기준으로 DB에 보유 상태를 저장할 수
-              있도록 구조를 맞춰 두었습니다.
+            <p className="mt-5 max-w-2xl text-sm leading-8 text-[#9eadc1]">
+              포인터룸의 프리미엄 팩은 강한 개성을 가진 스킨과 저장 기능을 여는 업그레이드입니다.
+              싸게 보이는 결제 페이지 대신, 실제 제품 페이지처럼 믿고 누를 수 있는 톤으로 다시
+              설계했습니다.
             </p>
           </div>
-          <Link className="ghost-button px-5 py-3 text-sm font-bold text-[#09111f]" href="/setup">
-            설정 상태 확인
+          <Link className="ghost-button px-5 py-3 text-sm font-bold text-white" href="/setup">
+            연결 상태 확인
           </Link>
         </div>
       </header>
 
       {!tossReady ? (
-        <section className="panel-outline mt-6 px-5 py-4 text-sm leading-7 text-[#7a4d00]">
-          지금은 토스 시크릿 키가 없어서 실제 결제는 막아 둔 상태예요. `/setup`에서 환경변수를
-          넣은 뒤 다시 시도하면 됩니다.
+        <section className="panel-outline mt-6 px-5 py-4 text-sm leading-7 text-[#ffd57c]">
+          지금은 토스 시크릿 키가 없어서 실제 결제는 막혀 있습니다. `/setup`에서 환경변수를 넣은 뒤
+          다시 시도하면 됩니다.
         </section>
       ) : null}
 
-      <section className="mt-6 grid gap-6 lg:grid-cols-[1.05fr_0.95fr]">
+      <section className="mt-6 grid gap-6 lg:grid-cols-[1.04fr_0.96fr]">
         <article className="poster-card p-6">
-          <div className="section-chip">Pack Select</div>
+          <div className="section-chip">pack select</div>
           <div className="mt-5 grid gap-4">
             {plans
               .filter((plan) => plan.code !== "free")
@@ -89,47 +89,35 @@ export default function CheckoutClient({ initialPlan, tossReady }: Props) {
                 return (
                   <button
                     key={plan.code}
-                    className={`rounded-[1.8rem] border-2 px-5 py-5 text-left ${
+                    className={`rounded-[1.8rem] border px-5 py-5 text-left ${
                       active
-                        ? "border-[#09111f] bg-[#09111f] text-white shadow-[10px_10px_0_rgba(9,17,31,0.95)]"
-                        : "border-[#09111f]/10 bg-white/80 text-[#09111f]"
+                        ? "border-[#a9ff2f]/45 bg-[#141b11] shadow-[0_0_0_1px_rgba(169,255,47,0.12)]"
+                        : "border-white/8 bg-white/[0.02]"
                     }`}
                     onClick={() => setPlanCode(plan.code)}
                     type="button"
                   >
                     <div className="flex items-center justify-between">
                       <div>
-                        <p
-                          className={`text-xs uppercase tracking-[0.25em] ${
-                            active ? "text-white/70" : "text-[#5C7C92]"
-                          }`}
-                        >
-                          {plan.headline}
-                        </p>
-                        <h2 className="mt-2 font-display text-4xl leading-none">{plan.name}</h2>
+                        <p className="text-xs uppercase tracking-[0.25em] text-[#9cadc2]">{plan.headline}</p>
+                        <h2 className="mt-2 font-display text-4xl leading-none text-white">{plan.name}</h2>
                       </div>
-                      <span
-                        className={`rounded-full px-3 py-1 text-xs font-semibold ${
-                          active ? "bg-white/15 text-white" : "bg-[#09111f] text-white"
-                        }`}
-                      >
+                      <span className="rounded-full bg-white/8 px-3 py-1 text-xs font-semibold text-white">
                         {plan.priceText}
                       </span>
                     </div>
-                    <p className={`mt-4 text-sm leading-7 ${active ? "text-white/82" : "text-[#41556b]"}`}>
-                      {plan.summary}
-                    </p>
+                    <p className="mt-4 text-sm leading-7 text-[#9eadc1]">{plan.summary}</p>
                   </button>
                 );
               })}
           </div>
         </article>
 
-        <article className="hard-card bg-[#fbfeff] p-6">
-          <div className="note-label gold">Order Form</div>
+        <article className="hard-card p-6">
+          <div className="note-label gold">checkout</div>
           <div className="mt-5 space-y-4">
             <label className="block">
-              <span className="mb-2 block text-sm font-bold text-[#09111f]">이름</span>
+              <span className="mb-2 block text-sm font-bold text-white">이름</span>
               <input
                 className="form-field"
                 onChange={(event) => setCustomerName(event.target.value)}
@@ -137,7 +125,7 @@ export default function CheckoutClient({ initialPlan, tossReady }: Props) {
               />
             </label>
             <label className="block">
-              <span className="mb-2 block text-sm font-bold text-[#09111f]">이메일</span>
+              <span className="mb-2 block text-sm font-bold text-white">이메일</span>
               <input
                 className="form-field"
                 onChange={(event) => setCustomerEmail(event.target.value)}
@@ -146,8 +134,8 @@ export default function CheckoutClient({ initialPlan, tossReady }: Props) {
             </label>
           </div>
 
-          <div className="mt-6 rounded-[1.8rem] bg-[#09111f] p-5 text-white">
-            <p className="text-sm font-bold uppercase tracking-[0.25em] text-white/65">Selected Pack</p>
+          <div className="mt-6 rounded-[1.8rem] border border-white/8 bg-black/25 p-5 text-white">
+            <p className="text-sm font-bold uppercase tracking-[0.25em] text-white/55">selected pack</p>
             <h3 className="mt-2 font-display text-4xl leading-none">{selectedPlan.name}</h3>
             <p className="mt-2 text-lg text-white/85">{selectedPlan.priceText}</p>
             <ul className="mt-5 space-y-3 text-sm text-white/82">
@@ -158,11 +146,11 @@ export default function CheckoutClient({ initialPlan, tossReady }: Props) {
           </div>
 
           {status ? (
-            <p className="mt-4 rounded-[1.2rem] bg-[#fff1f1] px-4 py-3 text-sm text-[#b42318]">{status}</p>
+            <p className="mt-4 rounded-[1.2rem] bg-[#2a1412] px-4 py-3 text-sm text-[#ff9d90]">{status}</p>
           ) : null}
 
           <button
-            className="sticker-button mt-6 inline-flex w-full items-center justify-center bg-[#ffbe3b] px-6 py-4 text-sm font-bold text-[#09111f] disabled:cursor-not-allowed disabled:opacity-70"
+            className="sticker-button mt-6 inline-flex w-full items-center justify-center bg-[#a9ff2f] px-6 py-4 text-sm font-bold text-[#081018] disabled:opacity-70"
             disabled={submitting}
             onClick={handleCheckout}
             type="button"

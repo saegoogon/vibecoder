@@ -4,13 +4,13 @@ export const dynamic = "force-static";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "CursorVerse",
-    short_name: "CursorVerse",
-    description: "마우스 커서 스킨을 고르고 바로 적용하는 커서 갤러리 서비스",
+    name: "포인터룸",
+    short_name: "포인터룸",
+    description: "마우스 커서 스킨을 고르고 바로 적용하는 커서 스튜디오",
     start_url: "/",
     display: "standalone",
-    background_color: "#f4f7fb",
-    theme_color: "#09111f",
+    background_color: "#0a0d12",
+    theme_color: "#0a0d12",
     icons: [
       {
         src: "/favicon.ico",
